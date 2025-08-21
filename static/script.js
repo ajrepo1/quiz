@@ -3,6 +3,7 @@ const uploadForm = document.getElementById('uploadForm');
 const uploadStatus = document.getElementById('uploadStatus');
 const numQuestionsInput = document.getElementById('numQuestions');
 const modeSelect = document.getElementById('mode');
+const useAICheck = document.getElementById('useAI');
 const generateBtn = document.getElementById('generateBtn');
 const genStatus = document.getElementById('genStatus');
 const quizContainer = document.getElementById('quizContainer');
@@ -37,6 +38,13 @@ function renderQuiz(questions) {
 		const title = document.createElement('h3');
 		title.textContent = `Q${idx + 1} (${q.type?.toUpperCase?.() || 'MCQ'}). ${q.question}`;
 		div.appendChild(title);
+		const meta = document.createElement('div');
+		meta.className = 'question-meta';
+		const mark = document.createElement('span');
+		mark.className = 'mark-badge mark-wrong';
+		mark.textContent = '0';
+		meta.appendChild(mark);
+		div.appendChild(meta);
 		q.options.forEach((opt, i) => {
 			const label = document.createElement('label');
 			label.className = 'option';
@@ -65,13 +73,17 @@ generateBtn.addEventListener('click', async () => {
 		const res = await fetch('/generate-quiz', {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ text, num_questions: numQuestions, mode })
+			body: JSON.stringify({ text, num_questions: numQuestions, mode, use_ai: !!useAICheck?.checked })
 		});
 		const data = await res.json();
 		if (!res.ok) throw new Error(data.error || 'Failed to generate quiz');
 		const questions = (data.questions || []).slice(0, Math.min(numQuestions, 100));
 		renderQuiz(questions);
-		genStatus.textContent = `Generated ${questions.length} question(s).`;
+		const meta = [];
+		if (data.used_ai) meta.push(`AI:${data.provider||'on'}`); else meta.push('heuristic');
+		if (data.fallback) meta.push('fallback');
+		if (data.ai_error) meta.push('ai_error');
+		genStatus.textContent = `Generated ${questions.length} question(s) • ${meta.join(' / ')}`;
 	} catch (err) {
 		genStatus.textContent = 'Error: ' + err.message;
 	}
@@ -79,17 +91,38 @@ generateBtn.addEventListener('click', async () => {
 
 showAnswersBtn.addEventListener('click', () => {
 	const questionDivs = Array.from(document.querySelectorAll('#quizContainer .question'));
+	let total = 0;
 	questionDivs.forEach((div, idx) => {
 		const inputs = Array.from(div.querySelectorAll('input[type="radio"]'));
 		if (!window.currentQuestions || !window.currentQuestions[idx]) return;
+		const correctIdx = window.currentQuestions[idx].answer_index;
+		let selectedIdx = -1;
 		inputs.forEach((input, i) => {
 			const label = input.parentElement;
 			label.classList.remove('correct', 'incorrect');
-			if (i === window.currentQuestions[idx].answer_index) {
+			if (i === correctIdx) {
 				label.classList.add('correct');
 			}
+			if (input.checked) selectedIdx = i;
 		});
+		const markEl = div.querySelector('.mark-badge');
+		if (markEl) {
+			const isCorrect = selectedIdx === correctIdx;
+			markEl.textContent = isCorrect ? '1' : '0';
+			markEl.classList.remove('mark-correct', 'mark-wrong');
+			markEl.classList.add(isCorrect ? 'mark-correct' : 'mark-wrong');
+			if (isCorrect) total += 1;
+		}
 	});
+	let totalScore = document.getElementById('totalScore');
+	if (!totalScore) {
+		const quizCard = quizContainer.parentElement;
+		totalScore = document.createElement('div');
+		totalScore.id = 'totalScore';
+		totalScore.className = 'total-score';
+		quizCard.appendChild(totalScore);
+	}
+	totalScore.textContent = `Total: ${total} / ${questionDivs.length}`;
 });
 
 // Keep a copy of current questions for showing answers

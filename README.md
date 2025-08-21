@@ -77,6 +77,29 @@ quiz/
 4. **Generate**: Click "Generate" to create your quiz
 5. **Review**: Use "Show Answers" to see correct responses
 
+### AI-powered questions (optional)
+
+- You can use OpenAI or compatible free tiers (e.g., OpenRouter, Groq). Configure via env vars:
+  - `AI_API_KEY` (preferred) or `OPENAI_API_KEY`
+  - `AI_BASE_URL` (optional, e.g., `https://openrouter.ai/api/v1`)
+  - `AI_MODEL` (optional, provider model name)
+- Example (PowerShell):
+  ```powershell
+  $env:AI_API_KEY = 'your_key_here'
+  $env:AI_BASE_URL = 'https://openrouter.ai/api/v1'
+  $env:AI_MODEL = 'openrouter/anthropic/claude-3-haiku'
+  python app.py
+  ```
+- Tick the "Use AI" checkbox before generating.
+
+#### Google AI Studio (Gemini)
+```powershell
+$env:AI_PROVIDER = 'google'
+$env:GOOGLE_API_KEY = 'your_google_ai_studio_key'
+$env:AI_MODEL = 'gemini-1.5-flash'
+python app.py
+```
+
 ## Quiz Types
 
 - **MCQ**: Traditional multiple choice with 4 options
@@ -127,6 +150,14 @@ The application runs in debug mode by default, which means:
 7. Deploy; Render provides a public URL.
 
 ### Heroku (alternative)
+### Vercel (serverless)
+
+1. Ensure `vercel.json` and `api/index.py` are present (they are).
+2. Push to GitHub.
+3. On Vercel, "New Project" → Import the repo.
+4. Framework Preset: Other.
+5. Environment Variables: add `AI_API_KEY` / `OPENAI_API_KEY` / `GOOGLE_API_KEY`, `AI_BASE_URL`, `AI_MODEL` as needed.
+6. Deploy. Vercel will serve `api/index.py` as the WSGI entry and route `/` and `/static/*` accordingly.
 1. Create a `Procfile` with:
    ```
    web: gunicorn app:app --workers 2

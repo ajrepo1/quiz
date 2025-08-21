@@ -3,13 +3,68 @@
 <head>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
-	<title>Quiz Generator</title>
+	<title>AI Quiz Maker from PDF, DOCX, Text – Free Quiz Generator</title>
+	<meta name="description" content="Turn PDFs, DOCX, and text into high‑quality quizzes with AI. Generate MCQ and True/False questions in seconds. Free, fast, and private." />
+	<link rel="canonical" href="http://localhost:5000/" />
+	<meta name="robots" content="index,follow" />
+
+	<!-- Open Graph -->
+	<meta property="og:title" content="AI Quiz Maker from PDF – Free Quiz Generator" />
+	<meta property="og:description" content="Upload a PDF or paste text to instantly create MCQ and True/False quizzes with AI." />
+	<meta property="og:type" content="website" />
+	<meta property="og:url" content="http://localhost:5000/" />
+
+	<!-- Twitter -->
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:title" content="AI Quiz Maker from PDF – Free Quiz Generator" />
+	<meta name="twitter:description" content="Create quizzes in seconds from your documents. No signup required." />
+
 	<link rel="stylesheet" href="/static/style.css" />
+
+	<!-- Structured Data -->
+	<script type="application/ld+json">
+	{
+		"@context": "https://schema.org",
+		"@type": "WebApplication",
+		"name": "AI Quiz Maker",
+		"url": "http://localhost:5000/",
+		"applicationCategory": "EducationalApplication",
+		"operatingSystem": "Web",
+		"description": "Generate quizzes from PDF, DOCX, and text using AI.",
+		"offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+	}
+	</script>
 </head>
 <body>
+    <nav class="site-nav">
+        <div class="container nav-inner">
+            <a class="brand" href="/">AI Quiz Maker</a>
+            <div class="nav-links">
+                <a href="/about">About</a>
+                <a href="/contact">Contact</a>
+                <a href="/policy">Policy</a>
+            </div>
+        </div>
+    </nav>
+	<header class="site-hero">
+		<div class="container hero-inner">
+			<div class="hero-copy">
+				<h1>AI Quiz Maker from PDF, DOCX, and Text</h1>
+				<p class="sub">Upload your notes or paste content to generate high‑quality MCQ and True/False quizzes in seconds. Private. Fast. Free.</p>
+				<ul class="hero-bullets">
+					<li>Upload PDF/DOCX/TXT or paste text</li>
+					<li>Choose MCQ, True/False, or Mixed</li>
+					<li>Up to 100 questions per quiz</li>
+				</ul>
+			</div>
+		</div>
+	</header>
+
 	<div class="container">
-		<h1>Quiz Generator</h1>
-		<p>Create custom quizzes from PDF, DOCX, or pasted text.</p>
+		<div class="card callout">
+			<h2>Get Started</h2>
+			<p>Extract text from a file or paste text below, then generate your quiz.</p>
+		</div>
 
 		<div class="card">
 			<h2>1) Upload a file (PDF/DOCX/TXT)</h2>
@@ -35,6 +90,9 @@
 					<option value="mixed">Mixed</option>
 				</select>
 			</label>
+			<label style="margin-left:12px;">
+				<input type="checkbox" id="useAI" /> Use AI
+			</label>
 			<button id="generateBtn">Generate</button>
 			<div id="genStatus" class="status"></div>
 		</div>
@@ -46,9 +104,81 @@
 				<button id="showAnswersBtn">Show Answers</button>
 			</div>
 		</div>
+
+		<section class="features">
+			<div class="container">
+				<h2>Why use this AI Quiz Generator?</h2>
+				<div class="grid-3">
+					<div class="feature">
+						<h3>Lightning‑fast</h3>
+						<p>Create up to 100 questions in seconds from your study materials.</p>
+					</div>
+					<div class="feature">
+						<h3>Flexible inputs</h3>
+						<p>Upload PDF/DOCX/TXT or just paste text. Works great on lecture notes.</p>
+					</div>
+					<div class="feature">
+						<h3>AI‑enhanced</h3>
+						<p>Optionally use AI for richer, clearer questions and balanced difficulty.</p>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<section class="how-it-works">
+			<div class="container">
+				<h2>How it works</h2>
+				<ol class="steps">
+					<li>Upload a file or paste your text</li>
+					<li>Choose the quiz type and number of questions</li>
+					<li>Click Generate and take your quiz</li>
+				</ol>
+			</div>
+		</section>
+
+		<section class="testimonials">
+			<div class="container">
+				<h2>What learners say</h2>
+				<div class="grid-2">
+					<blockquote>
+						<p>“Helps me practice faster before exams—MCQs are clear and on‑point.”</p>
+						<cite>— College Student</cite>
+					</blockquote>
+					<blockquote>
+						<p>“I convert class notes into quizzes in minutes. Students love it.”</p>
+						<cite>— Teacher</cite>
+					</blockquote>
+				</div>
+			</div>
+		</section>
+
+		<section class="faq">
+			<div class="container">
+				<h2>FAQs</h2>
+				<div class="grid-2">
+					<div>
+						<h3>Is it free?</h3>
+						<p>Yes. You can generate quizzes for free. Optional AI mode may use your own API key.</p>
+					</div>
+					<div>
+						<h3>What files are supported?</h3>
+						<p>PDF, DOCX, and TXT for uploads; you can also paste text directly.</p>
+					</div>
+				</div>
+			</div>
+		</section>
 	</div>
 
+	<footer class="site-footer">
+		<div class="container footer-inner">
+			<p>© <span id="year"></span> AI Quiz Maker • Generate quizzes from your notes in seconds.</p>
+		</div>
+	</footer>
+
 	<script src="/static/script.js"></script>
+<script>
+document.getElementById('year').textContent = new Date().getFullYear();
+</script>
 </body>
 </html>
 
