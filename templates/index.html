@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>Quiz Generator</title>
+	<link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+	<div class="container">
+		<h1>Quiz Generator</h1>
+		<p>Create custom quizzes from PDF, DOCX, or pasted text.</p>
+
+		<div class="card">
+			<h2>1) Upload a file (PDF/DOCX/TXT)</h2>
+			<form id="uploadForm">
+				<input type="file" id="fileInput" name="file" accept=".pdf,.docx,.txt" />
+				<button type="submit">Extract Text</button>
+			</form>
+			<div id="uploadStatus" class="status"></div>
+		</div>
+
+		<div class="card">
+			<h2>2) Or paste text</h2>
+			<textarea id="textInput" rows="10" placeholder="Paste text here..."></textarea>
+		</div>
+
+		<div class="card">
+			<h2>3) Generate Quiz</h2>
+			<label>Number of questions: <input type="number" id="numQuestions" min="1" max="100" value="5" /></label>
+			<label style="margin-left:12px;">Type: 
+				<select id="mode">
+					<option value="mcq" selected>MCQ</option>
+					<option value="tf">True/False</option>
+					<option value="mixed">Mixed</option>
+				</select>
+			</label>
+			<button id="generateBtn">Generate</button>
+			<div id="genStatus" class="status"></div>
+		</div>
+
+		<div class="card">
+			<h2>Quiz</h2>
+			<div id="quizContainer"></div>
+			<div class="actions">
+				<button id="showAnswersBtn">Show Answers</button>
+			</div>
+		</div>
+	</div>
+
+	<script src="/static/script.js"></script>
+</body>
+</html>
+
