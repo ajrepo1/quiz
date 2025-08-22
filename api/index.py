@@ -1,23 +1,64 @@
-import sys
-from pathlib import Path
+from flask import Flask, request, jsonify, render_template
+from werkzeug.utils import secure_filename
+import os
 
-# Ensure project root is importable when running in Vercel serverless
-ROOT = Path(__file__).resolve().parent.parent
-if str(ROOT) not in sys.path:
-    sys.path.insert(0, str(ROOT))
+# Create Flask app directly in this file to avoid import issues
+app = Flask(__name__)
 
-from app import app as flask_app  # noqa: E402
+ALLOWED_EXTENSIONS = {"pdf", "docx", "txt"}
 
-# Point Flask to the correct static and templates directories in serverless env
-flask_app.static_folder = str(ROOT / "static")
-flask_app.static_url_path = "/static"
-flask_app.template_folder = str(ROOT / "templates")
+def is_allowed_file(filename: str) -> bool:
+    return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
 
-# Vercel expects a module-level WSGI entry named "app"
-app = flask_app
+@app.route("/")
+def index():
+    return render_template("index.html")
 
-# Ensure debug mode is disabled for production
-flask_app.debug = False
+@app.route("/about")
+def about():
+    return render_template("about.html")
+
+@app.route("/contact")
+def contact():
+    return render_template("contact.html")
+
+@app.route("/policy")
+def policy():
+    return render_template("policy.html")
+
+@app.route("/upload", methods=["POST"])
+def upload():
+    if "file" not in request.files:
+        return jsonify({"error": "No file part"}), 400
+    file = request.files["file"]
+    if file.filename == "":
+        return jsonify({"error": "No selected file"}), 400
+    if not is_allowed_file(file.filename):
+        return jsonify({"error": "Unsupported file type. Use PDF, DOCX, or TXT."}), 400
+
+    try:
+        # For now, return a simple response to test if the route works
+        return jsonify({"message": "File upload endpoint working"})
+    except Exception as exc:
+        return jsonify({"error": f"Failed to process file: {exc}"}), 500
+
+@app.route("/generate-quiz", methods=["POST"])
+def generate_quiz_endpoint():
+    payload = request.get_json(silent=True) or {}
+    text = (payload.get("text") or "").strip()
+    if not text:
+        return jsonify({"error": "Text is required"}), 400
+    
+    # For now, return a simple response to test if the route works
+    return jsonify({"message": "Quiz generation endpoint working", "text_length": len(text)})
+
+# Test route to verify deployment
+@app.route("/test")
+def test():
+    return {"message": "Flask app is working on Vercel!", "status": "success"}
+
+if __name__ == "__main__":
+    app.run(debug=False)
 
 
 
