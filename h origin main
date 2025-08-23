@@ -1,0 +1,5 @@
+[33m5132709[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m Add HTML interface - now works like localhost version with web UI
+[33m2d4184a[m Add back full quiz functionality - file upload and quiz generation
+[33m33f547b[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m Simplify Flask app for Vercel deployment - remove template dependencies
+[33m479837b[m Update Vercel configuration and fix Flask app for deployment
+[33mfd20248[m Fix Vercel deployment configuration
